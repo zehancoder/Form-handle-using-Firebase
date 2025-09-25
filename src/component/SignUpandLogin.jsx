@@ -3,14 +3,15 @@ import { FaUserLarge } from "react-icons/fa6";
 import { IoMailSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { signUp, Login, auth, Logout } from "../firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { useContext } from "react";
-import userContext from "../context/context";
+import { FaEyeSlash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+
 
 function SignUpandLogin() {
   const [signUpMsg, setSignUpMsg] = useState("");
 
   const [messeges, setMesseges] = useState(false);
+  const [eye, setEye] = useState(false)
 
   const [signState, setsignState] = useState("Sign Up");
   const [userName, setuserName] = useState("");
@@ -19,7 +20,7 @@ function SignUpandLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (signState == "Sign Up") {
       await signUp(userName, email, password, setSignUpMsg);
     } else {
@@ -27,7 +28,7 @@ function SignUpandLogin() {
     }
     setTimeout(() => {
       setMesseges(true);
-    }, 200)
+    }, 200);
   };
 
   const logoutHandle = () => {
@@ -143,10 +144,13 @@ function SignUpandLogin() {
                       name="password"
                       onChange={(e) => setpassword(e.target.value)}
                       required
-                      type="password"
-                      className="w-[91%] py-[10px]  outline-none font-medium text-[15px]"
+                      type={eye ? "text" : "password"}
+                      className="w-[91%] pl-3 py-[10px]  outline-none font-medium text-[15px]"
                       placeholder="Password"
                     />
+                    <FaEye onClick={()=> setEye(false)} className={`cursor-pointer ${eye ? "block" : "hidden"}`}/>
+                    <FaEyeSlash onClick={() => setEye(true)} className={`cursor-pointer ${eye ? "hidden" : "block"}`}/>
+
                   </div>
                 </div>
                 <div className=" mt-3">
