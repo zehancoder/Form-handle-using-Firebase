@@ -10,6 +10,8 @@ import userContext from "../context/context";
 function SignUpandLogin() {
   const [signUpMsg, setSignUpMsg] = useState("");
 
+  const [messeges, setMesseges] = useState(false);
+
   const [signState, setsignState] = useState("Sign Up");
   const [userName, setuserName] = useState("");
   const [email, setemail] = useState("");
@@ -17,11 +19,15 @@ function SignUpandLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (signState == "Sign Up") {
       await signUp(userName, email, password, setSignUpMsg);
     } else {
       await Login(email, password, setSignUpMsg);
     }
+    setTimeout(() => {
+      setMesseges(true);
+    }, 200)
   };
 
   const logoutHandle = () => {
@@ -31,16 +37,16 @@ function SignUpandLogin() {
 
   useEffect(() => {
     setTimeout(() => {
-      setSignUpMsg("");
+      setMesseges(false);
     }, 2000);
-  }, [signUpMsg]);
+  }, [handleSubmit]);
 
   return (
     <>
       {
         <div
           className={`absolute left-0 bottom-28 transition duration-300 transform ${
-            signUpMsg != "" ? "-translate-x-0" : "-translate-x-[200px]"
+            messeges ? "-translate-x-0" : "-translate-x-[300px]"
           }`}
         >
           <div className="py-2 px-8 border border-[#10a6c4f5] rounded-lg text-center inputCustomShadow  text-[#10a6c4f5]">
