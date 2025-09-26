@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import { FaUserLarge } from "react-icons/fa6";
 import { IoMailSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
-import { signUp, Login, auth, Logout } from "../firebase/firebase";
+import {
+  signUp,
+  Login,
+  auth,
+  Logout,
+  signUpLoginWithGoogle,
+} from "../firebase/firebase";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-
 
 function SignUpandLogin() {
   const [signUpMsg, setSignUpMsg] = useState("");
 
   const [messeges, setMesseges] = useState(false);
-  const [eye, setEye] = useState(false)
+  const [eye, setEye] = useState(false);
 
   const [signState, setsignState] = useState("Sign Up");
   const [userName, setuserName] = useState("");
@@ -42,12 +47,28 @@ function SignUpandLogin() {
     }, 2000);
   }, [handleSubmit]);
 
+
+  const googleAuthHandle = () => {
+    signUpLoginWithGoogle(setSignUpMsg);
+  };
+
+  useEffect(() => {
+    signUpMsg == "Google Authentication Success"
+      ? setMesseges(true)
+      : setMesseges(false);
+    signUpMsg == "Google Authentication Success" &&
+      setTimeout(() => {
+        setMesseges(false);
+      }, 2000);
+  }, [signUpMsg]);
+
+
   return (
     <>
       {
         <div
           className={`absolute left-0 bottom-28 transition duration-300 transform ${
-            messeges ? "-translate-x-0" : "-translate-x-[300px]"
+            messeges ? "-translate-x-0" : "-translate-x-[350px]"
           }`}
         >
           <div className="py-2 px-8 border border-[#10a6c4f5] rounded-lg text-center inputCustomShadow  text-[#10a6c4f5]">
@@ -60,7 +81,8 @@ function SignUpandLogin() {
         <div
           className={`${
             signUpMsg == "Successfuly SignUP" ||
-            signUpMsg == "Successfuly Login"
+            signUpMsg == "Successfuly Login" ||
+            signUpMsg == "Google Authentication Success"
               ? "block"
               : "hidden"
           }`}
@@ -81,7 +103,8 @@ function SignUpandLogin() {
         <div
           className={`${
             signUpMsg == "Successfuly SignUP" ||
-            signUpMsg == "Successfuly Login"
+            signUpMsg == "Successfuly Login" ||
+            signUpMsg == "Google Authentication Success"
               ? "hidden"
               : "block"
           }`}
@@ -95,7 +118,7 @@ function SignUpandLogin() {
               e.preventDefault();
               handleSubmit(e);
             }}
-            className="h-[450px] w-[370px]  md:w-[750px] rounded-3xl overflow-hidden bg-white customShadow"
+            className="h-[500px] w-[370px]  md:w-[750px] rounded-3xl overflow-hidden bg-white customShadow"
           >
             <div className="flex h-full w-full items-center justify-between ">
               <div
@@ -148,9 +171,14 @@ function SignUpandLogin() {
                       className="w-[91%] pl-3 py-[10px]  outline-none font-medium text-[15px]"
                       placeholder="Password"
                     />
-                    <FaEye onClick={()=> setEye(false)} className={`cursor-pointer ${eye ? "block" : "hidden"}`}/>
-                    <FaEyeSlash onClick={() => setEye(true)} className={`cursor-pointer ${eye ? "hidden" : "block"}`}/>
-
+                    <FaEye
+                      onClick={() => setEye(false)}
+                      className={`cursor-pointer ${eye ? "block" : "hidden"}`}
+                    />
+                    <FaEyeSlash
+                      onClick={() => setEye(true)}
+                      className={`cursor-pointer ${eye ? "hidden" : "block"}`}
+                    />
                   </div>
                 </div>
                 <div className=" mt-3">
@@ -189,6 +217,31 @@ function SignUpandLogin() {
                       {signState == "Sign In" ? "Sign Up" : "Sign In"}{" "}
                     </span>
                   </p>
+                </div>
+
+                <div>
+                  <div>
+                    <p className="text-[14px] font-normal text-gray-500 text-center mt-3">
+                      Or, {signState} With
+                    </p>
+                    <div className="flex items-center gap-6 mt-2 justify-center">
+                      <div
+                        onClick={googleAuthHandle}
+                        className="flex items-center gap-2  cursor-pointer"
+                      >
+                        <img className="h-5 w-5" src="/google.svg" alt="" />
+                        <p className="text-[14px] font-normal text-gray-500 text-center ">
+                          Google
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2  cursor-pointer">
+                        <img className="h-5 w-5" src="/facebook.svg" alt="" />
+                        <p className="text-[14px] font-normal text-gray-500 text-center ">
+                          Facebook
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="w-[40%] px-12 h-full customBg hidden md:flex items-center justify-center">

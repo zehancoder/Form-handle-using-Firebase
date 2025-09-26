@@ -2,11 +2,16 @@ import { initializeApp } from "firebase/app";
 import { useContext } from "react";
 import userContext from "../context/context";
 
+
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 const firebaseConfig = {
@@ -23,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider()
 
 const signUp = async (name, email, password, setSignUpMsg) => {
   
@@ -46,6 +52,16 @@ const signUp = async (name, email, password, setSignUpMsg) => {
   }
 };
 
+
+const signUpLoginWithGoogle = async (setSignUpMsg) => {
+  try {
+    await signInWithPopup(auth, googleProvider)
+    setSignUpMsg("Google Authentication Success")
+  } catch (error) {
+    setSignUpMsg("Please try again")
+  }
+}
+
 const Login = async (email, password,setSignUpMsg) => {
   try {
    
@@ -63,4 +79,4 @@ const Logout = async () => {
 
 };
 
-export { auth, db, signUp, Login, Logout };
+export { auth, db, signUp, Login, Logout, signUpLoginWithGoogle };
